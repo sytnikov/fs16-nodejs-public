@@ -1,5 +1,12 @@
 # Node.js assignment
 
+## Back-end squad (Group 1)
+
+- Shtanko Yaroslav
+- Md Shayemur Rahman
+- Amjad Shakhshir
+- Alexey Sytnikov
+
 ## Assignment 1
 
 ### Basic server
