@@ -2,10 +2,10 @@
 
 ## Back-end squad (Group 1)
 
-- Shtanko Yaroslav
-- Md Shayemur Rahman
-- Amjad Shakhshir
-- Alexey Sytnikov
+- Shtanko Yaroslav (product endpoints, read util)
+- Md Shayemur Rahman (orders endpoints, write util)
+- Amjad Shakhshir (users endpoints, list util)
+- Alexey Sytnikov (categories endpoints, delete util)
 
 ## Assignment 1
 
