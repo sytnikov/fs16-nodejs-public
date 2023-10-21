@@ -1,0 +1,15 @@
+{
+  "name": "fs16-nodejs",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "## Back-end squad (Group 1)",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}
