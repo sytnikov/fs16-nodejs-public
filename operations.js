@@ -1,4 +1,6 @@
 import fs from "fs";
+import path from "path";
+import { fileURLToPath } from "url";
 
 const listAllFiles = (path) => {
   fs.readdir(path, (err, files) => {
@@ -10,6 +12,19 @@ const listAllFiles = (path) => {
     files.forEach((file) => console.log(file));
   });
 };
+
+function readFileInDir(file) {
+  const __filename = fileURLToPath(import.meta.url);
+  const dirname = path.dirname(__filename);
+  const filePath = path.join(dirname, file);
+  fs.readFile(path.join(filePath), "utf8", (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(data);
+  });
+}
 
 const deleteFile = (path) => {
   const dirFolder = path.slice(0, 2);
@@ -44,6 +59,10 @@ export const handleCommand = (command, options) => {
 
     case "delete":
       deleteFile(path);
+      break;
+
+    case "read":
+      readFileInDir(path);
       break;
 
     default:
