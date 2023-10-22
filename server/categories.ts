@@ -1,8 +1,15 @@
-import http from "http";
+import http, { IncomingMessage, ServerResponse } from "http";
 import url from "url"
-import fs from "fs"
 
-const categories = [
+const parsed = url.parse("http://localhost:7007/categories/2")
+console.log('parsed:', parsed)
+
+interface Category {
+  id: number
+  name: string
+}
+
+const categories: Category[] = [
   {
     id: 1,
     name: "Shoes",
@@ -17,22 +24,8 @@ const categories = [
   },
 ];
 
-const sendFileContent = (res, fileName, contentType) => {
-  fs.readFile(fileName, (err, data) => {
-    if (err) {
-      res.writeHead(404)
-      res.write("File not found")
-      return
-    }
-    res.writeHead(200, {"Content-Type": contentType})
-    res.write(data)
-    res.end()
-  })
-}
-
-const server = http.createServer((req, res) => {
-  const URL = req.url;
-  console.log('URL:', URL)
+const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+  const URL: string | undefined = req.url;
   if (!URL) {
     res.statusCode = 400;
     res.end("Bad Request");
@@ -119,16 +112,6 @@ const server = http.createServer((req, res) => {
       res.statusCode = 200;
       res.end(JSON.stringify(categories));
     });
-  } else if (req.method === "GET" && URL === "/home") {
-    sendFileContent(res, "./client/home.html", "text/html")
-  } else if (req.method === "GET" && URL === "/404") {
-    sendFileContent(res, "./client/error.html", "text/html")
-  } else if (req.method === "GET" && URL === "/styles.css") {
-    sendFileContent(res, "client/styles.css", "text/css")
-  } else if (req.method === "GET" && URL === "/script.js") {
-    sendFileContent(res, "./client/script.js", "text/javascript")
-  } else if (req.method === "GET" && URL === "/favicon.ico") {
-    sendFileContent(res, "./client/favicon.ico", "image/x-icon")
   }
 });
 
