@@ -1,11 +1,5 @@
 import http, { IncomingMessage, ServerResponse } from "http";
-import url from "url"
-import { categories } from "./data/categories";
-
-const parsed = url.parse("http://localhost:7007/categories/2")
-console.log('parsed:', parsed)
-
-
+import {categoriesData} from "./data/categoriesData";
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
   const URL: string | undefined = req.url;
@@ -17,13 +11,13 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
 
   if (req.method === "GET" && URL === "/categories") {
     res.statusCode = 200;
-    res.end(JSON.stringify(categories));
+    res.end(JSON.stringify(categoriesData));
   } else if (req.method === "GET" && URL.startsWith("/categories/")) {
     const errorMesssage = {
       msg: "The category isn't found",
     };
     const categoryId = URL.split("/")[2];
-    const category = categories.find((cat) => cat.id === Number(categoryId));
+    const category = categoriesData.find((cat) => cat.id === Number(categoryId));
     if (!category) {
       res.statusCode = 404;
       res.end(JSON.stringify(errorMesssage));
@@ -36,7 +30,7 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
       msg: "The category you're trying to delete isn't found",
     };
     const categoryId = URL.split("/")[2];
-    const foundIndex = categories.findIndex(
+    const foundIndex = categoriesData.findIndex(
       (cat) => cat.id === Number(categoryId)
     );
     if (foundIndex === -1) {
@@ -44,9 +38,9 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
       res.end(JSON.stringify(errorMesssage));
       return;
     }
-    categories.splice(foundIndex, 1);
+    categoriesData.splice(foundIndex, 1);
     res.statusCode = 200;
-    res.end(JSON.stringify(categories));
+    res.end(JSON.stringify(categoriesData));
   } else if (req.method === "POST" && URL === "/categories") {
     let body = "";
     req.on("data", (chunk) => {
@@ -58,7 +52,7 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
       const errorMesssage = {
         msg: "The category with the same name already exists",
       };
-      const isFound = categories.findIndex(
+      const isFound = categoriesData.findIndex(
         (cat) => cat.name === newCategory.name
       );
       if (isFound > 0) {
@@ -66,10 +60,10 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
         res.end(JSON.stringify(errorMesssage));
         return;
       }
-      newCategory.id = categories.length + 1;
-      categories.push(newCategory);
+      newCategory.id = categoriesData.length + 1;
+      categoriesData.push(newCategory);
       res.statusCode = 201;
-      res.end(JSON.stringify(categories));
+      res.end(JSON.stringify(categoriesData));
     });
   } else if (req.method === "PUT" && URL.startsWith("/categories/")) {
     let body = "";
@@ -83,7 +77,7 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
         msg: "The category you're trying to update isn't found",
       };
       const categoryId = URL.split("/")[2];
-      const foundIndex = categories.findIndex(
+      const foundIndex = categoriesData.findIndex(
         (cat) => cat.id === Number(categoryId)
       );
       if (foundIndex === -1) {
@@ -91,9 +85,9 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
         res.end(JSON.stringify(errorMesssage));
         return;
       }
-      categories[foundIndex].name = update.name;
+      categoriesData[foundIndex].name = update.name;
       res.statusCode = 200;
-      res.end(JSON.stringify(categories));
+      res.end(JSON.stringify(categoriesData));
     });
   }
 });

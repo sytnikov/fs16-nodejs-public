@@ -1,7 +1,7 @@
 import http, { IncomingMessage, ServerResponse } from "http";
-import { products } from "./data/products";
+import { productsData } from "./data/productsData";
 import { productSchema } from "./schemas/productSchema";
-import { categories } from "./data/categories";
+import { categoriesData } from "./data/categoriesData";
 
 const PORT = 3005;
 
@@ -11,27 +11,27 @@ const server = http.createServer(
     // Delete product
     if (URL?.startsWith("/products/") && req.method === "DELETE") {
       const id = URL.split("/")[2];
-      const index = products.findIndex((item) => item.id === +id);
+      const index = productsData.findIndex((item) => item.id === +id);
       if (index === -1) {
         res.statusCode = 404;
         res.end("Product is not found");
         return;
       }
-      products.splice(index, 1);
-      res.end(JSON.stringify(products));
+      productsData.splice(index, 1);
+      res.end(JSON.stringify(productsData));
       // Get all products
     } else if (URL === "/products" && req.method === "GET") {
-      if (products.length === 0) {
+      if (productsData.length === 0) {
         res.statusCode = 404;
         res.end("Products are not found");
         return;
       }
       res.statusCode = 200;
-      res.end(JSON.stringify(products));
+      res.end(JSON.stringify(productsData));
       // Get  product by id
     } else if (URL?.startsWith("/products/") && req.method === "GET") {
       const id = URL.split("/")[2];
-      const item = products.find((i) => i.id === +id);
+      const item = productsData.find((i) => i.id === +id);
       if (!item) {
         res.statusCode = 404;
         res.end("Product is not found");
@@ -48,7 +48,7 @@ const server = http.createServer(
         .on("end", () => {
           const newItem = JSON.parse(body);
           const { error } = productSchema.validate(newItem);
-          const isExistCategory = products.find(
+          const isExistCategory = productsData.find(
             (i) => i.id === newItem.categoryId
           );
           if (!isExistCategory) {
@@ -61,18 +61,18 @@ const server = http.createServer(
             res.end(error.details[0].message);
             return;
           }
-          const category = categories.find((i) => i.id === newItem.categoryId);
-          newItem.id = products.length + 1;
+          const category = categoriesData.find((i) => i.id === newItem.categoryId);
+          newItem.id = productsData.length + 1;
           delete newItem.categoryId;
           newItem.category = category;
-          products.push(newItem);
+          productsData.push(newItem);
           res.statusCode = 201;
-          res.end(JSON.stringify(products));
+          res.end(JSON.stringify(productsData));
         });
       //  Update product
     } else if (URL?.startsWith("/products/") && req.method === "PUT") {
       const id = URL.split("/")[2];
-      const foundIndex = products.findIndex((i) => i.id === +id);
+      const foundIndex = productsData.findIndex((i) => i.id === +id);
       if (foundIndex === -1) {
         res.statusCode = 404;
         res.end("Item is not found");
@@ -91,23 +91,23 @@ const server = http.createServer(
             res.end(error.details[0].message);
             return;
           }
-          products[foundIndex] = newItem;
+          productsData[foundIndex] = newItem;
           newItem.id = +id;
           res.statusCode = 200;
-          res.end(JSON.stringify(products));
+          res.end(JSON.stringify(productsData));
         });
       // Sort by price
     } else if (URL?.startsWith("/products?") && req.method === "GET") {
       const sortParam = URL.split("?")[1];
       if (sortParam === "sort=asc") {
-        products.sort((a, b) => a.price - b.price);
+        productsData.sort((a, b) => a.price - b.price);
       } else if (sortParam === "sort=desc") {
-        products.sort((a, b) => b.price - a.price);
+        productsData.sort((a, b) => b.price - a.price);
       }
-      res.end(JSON.stringify(products));
+      res.end(JSON.stringify(productsData));
       // Get all products
     } else if (URL?.startsWith("/products") && req.method === "GET") {
-      res.end(JSON.stringify(products));
+      res.end(JSON.stringify(productsData));
     }
   }
 );
