@@ -49,6 +49,19 @@ const deleteFile = (path) => {
   });
 };
 
+const writeFileInDir = (fileName, content) => {
+  const __filename = fileURLToPath(import.meta.url);
+  const dirname = path.dirname(__filename);
+  const filePath = path.join(dirname, fileName);
+  fs.writeFile(filePath, content, "utf8", (err) => {
+    if (err) {
+      console.error("👀 Error writing to the file: ", err);
+    } else {
+      console.log(`Content written to ${filePath}`);
+    }
+  });
+};
+
 export const handleCommand = (command, options) => {
   const [path, content] = options;
 
@@ -63,6 +76,14 @@ export const handleCommand = (command, options) => {
 
     case "read":
       readFileInDir(path);
+      break;
+
+    case "write":
+      if (content) {
+        writeFileInDir(path, content);
+      } else {
+        console.log("Please provide content to write to the file.");
+      }
       break;
 
     default:
