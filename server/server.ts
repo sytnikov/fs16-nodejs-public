@@ -1,8 +1,22 @@
 import http, { IncomingMessage, ServerResponse } from "http";
+import fs from "fs"
 
 import { UsersController } from "./controllers/UsersController";
 import { CategoriesController } from "./controllers/CategoriesController";
 import { ProductsController } from "./controllers/ProductsController";
+
+const sendFileContent = (res: any, fileName: string, contentType: string) => {
+  fs.readFile(fileName, (err, data) => {
+    if (err) {
+      res.writeHead(404)
+      res.write("File not found")
+      return
+    }
+    res.writeHead(200, {"Content-Type": contentType})
+    res.write(data)
+    res.end()
+  })
+}
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
     const URL: string | undefined = req.url;
@@ -58,6 +72,16 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
     } else if (req.url?.match(/\/api\/products\/([0-9]+)/) && req.method === 'DELETE') {
         const id = req.url.split('/')[3];
         productsController.deleteProduct(req, res, Number(id));
+    } else if (req.method === "GET" && URL === "/home") {
+      sendFileContent(res, "./client/home.html", "text/html")
+    } else if (req.method === "GET" && URL === "/404") {
+      sendFileContent(res, "./client/error.html", "text/html")
+    } else if (req.method === "GET" && URL === "/styles.css") {
+      sendFileContent(res, "client/styles.css", "text/css")
+    } else if (req.method === "GET" && URL === "/script.js") {
+      sendFileContent(res, "./client/script.js", "text/javascript")
+    } else if (req.method === "GET" && URL === "/favicon.ico") {
+      sendFileContent(res, "./client/favicon.ico", "image/x-icon")
     } else {
         res.writeHead(404, { 'Content-Type': 'application/json' });
         res.end(JSON.stringify({ message: 'Route not found' }));
@@ -65,4 +89,5 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
 });
 
 const PORT = process.env.PORT || 8000;
+console.log('PORT:', PORT)
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));
