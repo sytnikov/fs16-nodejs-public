@@ -2,45 +2,38 @@
 
 ## Back-end squad (Group 1)
 
-- Shtanko Yaroslav (product endpoints, read util)
-- Md Shayemur Rahman (orders endpoints, write util)
-- Amjad Shakhshir (users endpoints, list util)
-- Alexey Sytnikov (categories endpoints, delete util)
+- Shtanko Yaroslav
+- Md Shayemur Rahman
+- Amjad Shakhshir
+- Alexey Sytnikov
 
-## Assignment 1
+## Basic server and serving the files
 
-### Basic server
+The basic http server for products, categories and users is built.
 
-Build a basic http server where you would have:
-
-- On-memory data (Hard coded array/json of products)
-- 5 different endpoints
+For each entity there different endpoints such as:
   - GET `/items`
   - GET `/items/{itemId}`
   - POST `/items`
   - Delete `/items/{itemId}`
   - PUT `/items/{itemId}`
-- Convert it to TypeScript
 
-### Serve \*.html files
+All the code is TypeScript based.
 
-- Serve two different \*.html files
-  - Home page
-  - 404 page
-- Serve `*.css` and `*.js` files with the home.html and 404.html
+Two `.html` files are served: home.html and error.html
 
-## Assignment 2
+There are also `*.css` and `*.js` files are served with these pages.
 
-You will create a Node.js command-line utility that interacts with the file system to perform various operations.
+## Comand-line utilities
 
-Your Node.js script should accept command-line arguments to determine the operation to be performed. The available operations should include:
+There are 4 Node.js command-line utilities created:
 
-- List files in a directory
-- Read the content of a specified file
-- Write content to a specified file
+- list files in a directory
+- read the content of a specified file
+- write content to a specified file
 - Delete a file
 
-Commands should be as the following:
+Here are the examples of the commands:
 
 ```shell
 node main.js list ./   // List files in the current directory
