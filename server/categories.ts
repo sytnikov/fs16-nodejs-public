@@ -1,5 +1,19 @@
 import http, { IncomingMessage, ServerResponse } from "http";
 import {categoriesData} from "./data/categoriesData";
+import fs from "fs"
+
+const sendFileContent = (res: any, fileName: string, contentType: string) => {
+  fs.readFile(fileName, (err, data) => {
+    if (err) {
+      res.writeHead(404)
+      res.write("File not found")
+      return
+    }
+    res.writeHead(200, {"Content-Type": contentType})
+    res.write(data)
+    res.end()
+  })
+}
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
   const URL: string | undefined = req.url;
@@ -89,6 +103,16 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
       res.statusCode = 200;
       res.end(JSON.stringify(categoriesData));
     });
+  } else if (req.method === "GET" && URL === "/home") {
+    sendFileContent(res, "./client/home.html", "text/html")
+  } else if (req.method === "GET" && URL === "/404") {
+    sendFileContent(res, "./client/error.html", "text/html")
+  } else if (req.method === "GET" && URL === "/styles.css") {
+    sendFileContent(res, "client/styles.css", "text/css")
+  } else if (req.method === "GET" && URL === "/script.js") {
+    sendFileContent(res, "./client/script.js", "text/javascript")
+  } else if (req.method === "GET" && URL === "/favicon.ico") {
+    sendFileContent(res, "./client/favicon.ico", "image/x-icon")
   }
 });
 
