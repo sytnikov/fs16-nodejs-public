@@ -1,5 +1,5 @@
 import { IncomingMessage, ServerResponse } from 'http';
-import { usersData } from './data/usersData';
+import { usersData } from '../data/usersData';
 
 export class UsersController {
     async getUsers(req: IncomingMessage, res: ServerResponse) {
