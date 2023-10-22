@@ -1,28 +1,11 @@
 import http, { IncomingMessage, ServerResponse } from "http";
 import url from "url"
+import { categories } from "./data/categories";
 
 const parsed = url.parse("http://localhost:7007/categories/2")
 console.log('parsed:', parsed)
 
-interface Category {
-  id: number
-  name: string
-}
 
-const categories: Category[] = [
-  {
-    id: 1,
-    name: "Shoes",
-  },
-  {
-    id: 2,
-    name: "Clothes",
-  },
-  {
-    id: 3,
-    name: "Accessories",
-  },
-];
 
 const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
   const URL: string | undefined = req.url;
