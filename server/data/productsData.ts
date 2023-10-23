@@ -8,7 +8,7 @@ export const productsData: Product[] = [
     category: {
       id: 1,
       name: "Clothes",
-      image: ["https://placeimg.com/640/480/any?r=0.9178516507833767"],
+      images: ["https://placeimg.com/640/480/any?r=0.9178516507833767"],
     },
   },
   {
@@ -18,7 +18,7 @@ export const productsData: Product[] = [
     category: {
       id: 2,
       name: "Books",
-      image: ["https://placeimg.com/640/480/any?r=0.9178516507833767"],
+      images: ["https://placeimg.com/640/480/any?r=0.9178516507833767"],
     },
   },
   {
@@ -28,7 +28,7 @@ export const productsData: Product[] = [
     category: {
       id: 3,
       name: "Others",
-      image: ["https://placeimg.com/640/480/any?r=0.9178516507833767"],
+      images: ["https://placeimg.com/640/480/any?r=0.9178516507833767"],
     },
   },
 ];
