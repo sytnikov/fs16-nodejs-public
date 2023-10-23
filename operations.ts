@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
 
-const listAllFiles = (path) => {
+const listAllFiles = (path: string) => {
   fs.readdir(path, (err, files) => {
     if (err) {
       console.log("👀 Be careful, there's a error");
@@ -13,7 +13,7 @@ const listAllFiles = (path) => {
   });
 };
 
-function readFileInDir(file) {
+function readFileInDir(file: string) {
   const __filename = fileURLToPath(import.meta.url);
   const dirname = path.dirname(__filename);
   const filePath = path.join(dirname, file);
@@ -26,7 +26,7 @@ function readFileInDir(file) {
   });
 }
 
-const deleteFile = (path) => {
+const deleteFile = (path: string) => {
   const dirFolder = path.slice(0, 2);
   const fileName = path.slice(2);
   fs.readdir(dirFolder, (err, files) => {
@@ -49,7 +49,7 @@ const deleteFile = (path) => {
   });
 };
 
-const writeFileInDir = (fileName, content) => {
+const writeFileInDir = (fileName: string, content: string) => {
   const __filename = fileURLToPath(import.meta.url);
   const dirname = path.dirname(__filename);
   const filePath = path.join(dirname, fileName);
@@ -62,7 +62,7 @@ const writeFileInDir = (fileName, content) => {
   });
 };
 
-export const handleCommand = (command, options) => {
+export const handleCommand = (command: string, options: string) => {
   const [path, content] = options;
 
   switch (command) {

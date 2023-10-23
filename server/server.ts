@@ -60,7 +60,7 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
         const id = req.url.split('/')[3];
         categoriesController.deleteCategory(req, res, Number(id));
     } else if (req.url === '/api/products' && req.method === 'GET') {
-        productsController.getProducts(req, res);
+      productsController.getProducts(req, res);
     } else if (req.url?.match(/\/api\/products\/([0-9]+)/) && req.method === 'GET') {
         const id = req.url.split('/')[3];
         productsController.getProduct(req, res, Number(id));
