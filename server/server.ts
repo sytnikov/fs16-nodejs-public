@@ -1,30 +1,31 @@
-import http, { IncomingMessage, ServerResponse } from "http";
-import fs from "fs"
+import http, { IncomingMessage, ServerResponse } from 'http';
+import fs from 'fs';
 
-import { UsersController } from "./controllers/UsersController";
-import { CategoriesController } from "./controllers/CategoriesController";
-import { ProductsController } from "./controllers/ProductsController";
+import { UsersController } from './controllers/UsersController';
+import { CategoriesController } from './controllers/CategoriesController';
+import { ProductsController } from './controllers/ProductsController';
 import { OrdersController } from './controllers/OrdersController';
 
 const sendFileContent = (res: any, fileName: string, contentType: string) => {
   fs.readFile(fileName, (err, data) => {
     if (err) {
-      res.writeHead(404)
-      res.write("File not found")
-      return
+      res.writeHead(404);
+      res.write('File not found');
+      return;
     }
-    res.writeHead(200, {"Content-Type": contentType})
-    res.write(data)
-    res.end()
-  })
-}
+    res.writeHead(200, { 'Content-Type': contentType });
+    res.write(data);
+    res.end();
+  });
+};
 
-const server = http.createServer((req: IncomingMessage, res: ServerResponse) => {
+const server = http.createServer(
+  (req: IncomingMessage, res: ServerResponse) => {
     const URL: string | undefined = req.url;
     if (!URL) {
-        res.statusCode = 400;
-        res.end("Bad Request");
-        return;
+      res.statusCode = 400;
+      res.end('Bad Request');
+      return;
     }
     const usersController = new UsersController();
     const categoriesController = new CategoriesController();
@@ -32,13 +33,10 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
     const ordersController = new OrdersController();
 
     if (req.url === '/' && req.method === 'GET') {
-        res.writeHead(200, { 'Content-Type': 'application/json' });
-        res.end(JSON.stringify({ message: 'Server is running' }));
-    }
-    else if (req.url === '/api/users' && req.method === 'GET') {
+      res.writeHead(200, { 'Content-Type': 'application/json' });
+      res.end(JSON.stringify({ message: 'Server is running' }));
+    } else if (req.url === '/api/users' && req.method === 'GET') {
       usersController.getUsers(req, res);
-    } else if (req.url === '/api/orders' && req.method === 'GET') {
-      ordersController.getOrders(req, res);
     } else if (
       req.url?.match(/\/api\/users\/([0-9]+)/) &&
       req.method === 'GET'
@@ -103,6 +101,28 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
     ) {
       const id = req.url.split('/')[3];
       productsController.deleteProduct(req, res, Number(id));
+    } else if (req.url === '/api/orders' && req.method === 'GET') {
+      ordersController.getOrders(req, res);
+    } else if (
+      req.url?.match(/\/api\/orders\/([0-9]+)/) &&
+      req.method === 'GET'
+    ) {
+      const id = req.url.split('/')[3];
+      ordersController.getSingleOrder(req, res, Number(id));
+    } else if (
+      req.url?.match(/\/api\/orders\/([0-9]+)/) &&
+      req.method === 'DELETE'
+    ) {
+      const id = req.url.split('/')[3];
+      ordersController.deleteASingleOrder(req, res, Number(id));
+    } else if (req.url === '/api/orders' && req.method === 'POST') {
+      ordersController.createOrder(req, res);
+    } else if (
+      req.url?.match(/\/api\/orders\/([0-9]+)/) &&
+      req.method === 'PUT'
+    ) {
+      const id = req.url.split('/')[3];
+      ordersController.updateOrder(req, res, Number(id));
     } else if (req.method === 'GET' && URL === '/home') {
       sendFileContent(res, './client/home.html', 'text/html');
     } else if (req.method === 'GET' && URL === '/404') {
@@ -117,8 +137,9 @@ const server = http.createServer((req: IncomingMessage, res: ServerResponse) => 
       res.writeHead(404, { 'Content-Type': 'application/json' });
       res.end(JSON.stringify({ message: 'Route not found' }));
     }
-});
+  }
+);
 
 const PORT = process.env.PORT || 8000;
-console.log('PORT:', PORT)
+console.log('PORT:', PORT);
 server.listen(PORT, () => console.log(`Server listening on port ${PORT}`));

@@ -1,8 +1,8 @@
-import { Order } from "../types/Order";
+import { Order } from '../types/Order';
 
 export const ordersData: Order[] = [
   {
-    id: 34,
+    id: 3,
     products: [
       {
         productId: 1,
@@ -11,7 +11,7 @@ export const ordersData: Order[] = [
     ],
   },
   {
-    id: 35,
+    id: 5,
     products: [
       {
         productId: 2,
